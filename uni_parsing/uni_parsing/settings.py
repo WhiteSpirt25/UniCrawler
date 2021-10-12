@@ -88,7 +88,7 @@ ITEM_PIPELINES = {
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 #Sets number of pages to be parsed.
-CLOSESPIDER_PAGECOUNT = 30
+CLOSESPIDER_PAGECOUNT = 0
 
 #Set path for stat saving class
 STATS_CLASS = 'uni_parsing.MyStatsCollector.MyStatsCollector'

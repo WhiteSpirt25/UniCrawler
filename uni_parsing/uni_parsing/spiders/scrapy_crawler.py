@@ -35,8 +35,8 @@ class ExampleSpider(CrawlSpider):
     name = "uni_crawl" #Spider name
     allowed_domains = ["spbu.ru"] # Which (sub-)domains shall be scraped?
 
-    start_urls = ["https://spbu.ru"]
-    #start_urls = ["https://dspace.spbu.ru/handle/11701/21736"] # Start with this one
+    start_urls = ["https://spbu.ru"] # Start with this one
+    #start_urls = ["https://dspace.spbu.ru/handle/11701/21736"] # File test url
 
     rules = [
         Rule(LinkExtractor(), callback='download_page', follow=True),
@@ -56,4 +56,4 @@ class ExampleSpider(CrawlSpider):
     def download_page(self, response):
         print('Got a response from %s.' % response.url)
 
-        #self._post_handler(response.url,response.body)
+        self._post_handler(response.url,response.body)
