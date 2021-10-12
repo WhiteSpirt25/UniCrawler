@@ -4,6 +4,10 @@ from scrapy.linkextractors import IGNORED_EXTENSIONS, LinkExtractor
 
 import requests as reqs
 
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
 # Removed PDF, DOC and DOCX so they could be parsed
 MY_IGNORED_EXTENSIONS = [
     # archives
@@ -28,14 +32,14 @@ MY_IGNORED_EXTENSIONS = [
     'css', 'exe', 'bin', 'rss', 'dmg', 'iso', 'apk'
 ]
 
-API_URL = "http://127.0.0.1:9292/api/v1/parse"
+API_URL = os.getenv('API_URL')
 
 
 class ExampleSpider(CrawlSpider):
     name = "uni_crawl" #Spider name
-    allowed_domains = ["spbu.ru"] # Which (sub-)domains shall be scraped?
+    allowed_domains = [os.getenv('ALOWED_DOMAIN')] # Which (sub-)domains shall be scraped?
 
-    start_urls = ["https://spbu.ru"] # Start with this one
+    start_urls = [os.getenv('START_URL')] # Start with this one
     #start_urls = ["https://dspace.spbu.ru/handle/11701/21736"] # File test url
 
     rules = [
