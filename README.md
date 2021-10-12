@@ -14,16 +14,16 @@ Implemented in Python 3.9.7 using Scrapy and Requests.
    
 2. Run Parsing Manager
    
-3. Set your crawler settings, if nedded.
+3. Set your crawler [settings](https://github.com/WhiteSpirt25/UniCrawler/blob/master/uni_parsing/uni_parsing/settings.py), if nedded.
    
    **Currently no speed or total amount limit is set!**
 
 4. Launch
 
-    '''bash
-    $ cd uni_parsing
-    $ scrapy crawl uni_crawler
-    '''
+    ```console
+   $ cd uni_parsing
+   $ scrapy crawl uni_crawl
+   ```
 
 ### License
 
