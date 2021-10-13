@@ -21,7 +21,7 @@ Implemented in Python 3.9.7 using Scrapy and Requests.
 4. Launch
 
     ```console
-   $ cd uni_parsing
+   $ cd crawler
    $ scrapy crawl uni_crawl
    ```
 
