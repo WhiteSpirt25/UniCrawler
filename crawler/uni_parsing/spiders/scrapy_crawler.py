@@ -43,9 +43,11 @@ class ExampleSpider(CrawlSpider):
     #start_urls = ["https://dspace.spbu.ru/handle/11701/21736"] # File test url
 
     rules = [
-        Rule(LinkExtractor(), callback='download_page', follow=True),
+        Rule(LinkExtractor(), callback='page_download', follow=True),
         # Rule for files, regexpr searches for urls with pdf,doc or docx on the end.
-        Rule(LinkExtractor(allow = '.*\.pdf|.*\.doc|.*\.docx',deny_extensions=MY_IGNORED_EXTENSIONS), callback ='download_page')
+        Rule(LinkExtractor(allow = '.*\.pdf',deny_extensions=MY_IGNORED_EXTENSIONS), callback ='pdf_download'),
+        Rule(LinkExtractor(allow = '.*\.doc',deny_extensions=MY_IGNORED_EXTENSIONS), callback ='doc_download'),
+        Rule(LinkExtractor(allow = '.*\.docx',deny_extensions=MY_IGNORED_EXTENSIONS), callback ='docx_download')
         ] 
     
     def _post_handler(self,url:str,file):
@@ -57,6 +59,21 @@ class ExampleSpider(CrawlSpider):
             }
         reqs.post(url=API_URL,data=data,files=files)
 
-    def download_page(self, response):
+    def page_download(self, response):
         #print('Got a response from %s.' % response.url)
+        self._post_handler(response.url,response.body)
+
+    def pdf_download(self, response):
+        #print('Got a response from %s.' % response.url)
+        self.crawler.stats.inc_value('pdf_files_met')
+        self._post_handler(response.url,response.body)
+    
+    def doc_download(self, response):
+        #print('Got a response from %s.' % response.url)
+        self.crawler.stats.inc_value('doc_files_met')
+        self._post_handler(response.url,response.body)
+
+    def docx_download(self, response):
+        #print('Got a response from %s.' % response.url)
+        self.crawler.stats.inc_value('docx_files_met')
         self._post_handler(response.url,response.body)
