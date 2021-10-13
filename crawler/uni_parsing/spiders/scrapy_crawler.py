@@ -58,6 +58,5 @@ class ExampleSpider(CrawlSpider):
         reqs.post(url=API_URL,data=data,files=files)
 
     def download_page(self, response):
-        print('Got a response from %s.' % response.url)
-
+        #print('Got a response from %s.' % response.url)
         self._post_handler(response.url,response.body)
