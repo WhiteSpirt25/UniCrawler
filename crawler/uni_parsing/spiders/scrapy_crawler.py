@@ -68,7 +68,7 @@ class ExampleSpider(CrawlSpider):
         reqs.post(url=API_URL,data=data,files=files)
 
     def subdomain_counter(self, response):
-        print('Subdomain %s.' % response.url)
+        #print('Subdomain %s.' % response.url)
         self.crawler.stats.inc_value('my_subdomain_urls')
         subdomain = re.findall(r'^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/?\n]+)',response.url)[0]
         if subdomain not in self.subdomains:
@@ -77,7 +77,7 @@ class ExampleSpider(CrawlSpider):
 
 
     def page_download(self, response):
-        print('Main domain %s.' % response.url)
+        #print('Main domain %s.' % response.url)
         self._post_handler(response.url,response.body)
 
     def pdf_download(self, response):
