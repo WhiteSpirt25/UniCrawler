@@ -4,11 +4,14 @@ from scrapy.linkextractors import IGNORED_EXTENSIONS, LinkExtractor
 
 import requests as reqs
 
-import os
-from dotenv import load_dotenv
-load_dotenv()
+from dotenv import dotenv_values
 
 import re
+
+CONFIG = {
+    **dotenv_values('.env'),
+    **dotenv_values('.env.local'),
+}
 
 # Removed PDF, DOC and DOCX so they could be parsed
 MY_IGNORED_EXTENSIONS = [
@@ -34,14 +37,14 @@ MY_IGNORED_EXTENSIONS = [
     'css', 'exe', 'bin', 'rss', 'dmg', 'iso', 'apk'
 ]
 
-API_URL = os.getenv('API_URL')
+API_URL = CONFIG['API_URL']
 
 
 class ExampleSpider(CrawlSpider):
     name = "uni_crawl" #Spider name
-    allowed_domains = [os.getenv('ALOWED_DOMAIN')] # Which (sub-)domains shall be scraped?
+    allowed_domains = [CONFIG['ALOWED_DOMAIN']] # Which (sub-)domains shall be scraped?
 
-    start_urls = [os.getenv('START_URL')] # Start with this one
+    start_urls = [CONFIG['START_URL']] # Start with this one
     #start_urls = ["https://dspace.spbu.ru/handle/11701/21736"] # File test url
 
     subdomains = set()
@@ -53,9 +56,9 @@ class ExampleSpider(CrawlSpider):
         # Blocks only 1-st allowed domain
         Rule(LinkExtractor(deny='\.' + allowed_domains[0]), callback='page_download', follow=True),
         # Rule for files, regexpr searches for urls with pdf,doc or docx on the end.
-        Rule(LinkExtractor(allow = '.*\.pdf',deny_extensions=MY_IGNORED_EXTENSIONS), callback ='pdf_download'),
-        Rule(LinkExtractor(allow = '.*\.doc',deny_extensions=MY_IGNORED_EXTENSIONS), callback ='doc_download'),
-        Rule(LinkExtractor(allow = '.*\.docx',deny_extensions=MY_IGNORED_EXTENSIONS), callback ='docx_download')
+        Rule(LinkExtractor(allow = '.*\.pdf$',deny_extensions=MY_IGNORED_EXTENSIONS), callback ='pdf_download'),
+        Rule(LinkExtractor(allow = '.*\.docx$',deny_extensions=MY_IGNORED_EXTENSIONS), callback ='docx_download'),
+        Rule(LinkExtractor(allow = '.*\.doc$',deny_extensions=MY_IGNORED_EXTENSIONS), callback ='doc_download'),
         ] 
     
     def _post_handler(self,url:str,file):
@@ -75,6 +78,8 @@ class ExampleSpider(CrawlSpider):
             self.crawler.stats.inc_value('my_subdomain_count')
             self.subdomains.add(subdomain)
 
+    def parse_start_url(self, response):
+        self.page_download(response)
 
     def page_download(self, response):
         #print('Main domain %s.' % response.url)
