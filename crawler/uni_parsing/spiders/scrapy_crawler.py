@@ -78,6 +78,8 @@ class ExampleSpider(CrawlSpider):
             self.crawler.stats.inc_value('my_subdomain_count')
             self.subdomains.add(subdomain)
 
+    def parse_start_url(self, response):
+        self.page_download(response)
 
     def page_download(self, response):
         #print('Main domain %s.' % response.url)
