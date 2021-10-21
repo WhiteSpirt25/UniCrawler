@@ -83,6 +83,7 @@ class ExampleSpider(CrawlSpider):
 
     def page_download(self, response):
         #print('Main domain %s.' % response.url)
+        self.crawler.stats.inc_value('my_pages_downloaded')
         self._post_handler(response.url,response.body)
 
     def pdf_download(self, response):
