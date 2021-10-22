@@ -27,21 +27,21 @@ Implemented in Python 3.9.7 using Scrapy and Requests.
 
 5. Start Docker containers
 
-```console
-$ docker-compose up
-```
+   ```
+   $ docker-compose up
+   ```
 
 6. Run crawler in docker
 
-```console
-docker-compose exec crawler sh -c "scrapy crawl uni_crawl"
-```
+   ```
+   $ docker-compose exec crawler sh -c "scrapy crawl uni_crawl"
+   ```
 
 7. Run tests in docker
 
-```console
-docker-compose exec crawler sh -c "mamba tests/crawler_test.py --format=documentation"
-```
+   ```
+   $ docker-compose exec crawler sh -c "mamba tests/crawler_test.py --format=documentation"
+   ```
 
 ### License
 
