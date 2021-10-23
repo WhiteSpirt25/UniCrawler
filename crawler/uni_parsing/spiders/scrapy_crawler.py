@@ -55,10 +55,10 @@ class ExampleSpider(CrawlSpider):
         # Rule for pages that are NOT in subdomain to download
         # Blocks only 1-st allowed domain
         Rule(LinkExtractor(deny='\.' + allowed_domains[0]), callback='page_download', follow=True),
-        # Rule for files, regexpr searches for urls with pdf,doc or docx on the end.
-        Rule(LinkExtractor(allow = '.*\.pdf$',deny_extensions=MY_IGNORED_EXTENSIONS), callback ='pdf_download'),
-        Rule(LinkExtractor(allow = '.*\.docx$',deny_extensions=MY_IGNORED_EXTENSIONS), callback ='docx_download'),
-        Rule(LinkExtractor(allow = '.*\.doc$',deny_extensions=MY_IGNORED_EXTENSIONS), callback ='doc_download'),
+        # Rule for files, regexpr searches for urls with pdf,doc or docx on the end. Ignores files in subdomains.
+        Rule(LinkExtractor(allow = '.*\.pdf$',deny='\.' + allowed_domains[0],deny_extensions=MY_IGNORED_EXTENSIONS), callback ='pdf_download'),
+        Rule(LinkExtractor(allow = '.*\.docx$',deny='\.' + allowed_domains[0],deny_extensions=MY_IGNORED_EXTENSIONS), callback ='docx_download'),
+        Rule(LinkExtractor(allow = '.*\.doc$',deny='\.' + allowed_domains[0],deny_extensions=MY_IGNORED_EXTENSIONS), callback ='doc_download'),
         ] 
     
     def _post_handler(self,url:str,file):
