@@ -51,7 +51,7 @@ class ExampleSpider(CrawlSpider):
 
     rules = [
         # Rule for pages in subdomain to count their amount
-        Rule(LinkExtractor(allow = '\.' + allowed_domains[0]), callback='subdomain_counter', follow=False),
+        Rule(LinkExtractor(allow = '\.' + allowed_domains[0],deny_extensions=MY_IGNORED_EXTENSIONS), callback='subdomain_counter', follow=False),
         # Rule for pages that are NOT in subdomain to download
         # Blocks only 1-st allowed domain
         Rule(LinkExtractor(deny='\.' + allowed_domains[0]), callback='page_download', follow=True),
