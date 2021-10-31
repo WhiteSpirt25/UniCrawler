@@ -17,13 +17,13 @@ with description('Crawler') as self:
         expect(self.stats.get('scheduler/enqueued', 0) +
             self.stats.get('offsite/filtered', 0) -
             self.stats.get('retry/count', 0)
-        ).to(equal(1029))
+        ).to(equal(1030))
 
     with it('counts inner pages correctly'):
         expect(self.stats.get('my_pages_downloaded', 0)).to(equal(1006))
 
     with it('counts inner subdomain urls correctly'):
-        expect(self.stats.get('my_subdomain_urls', 0)).to(equal(3))
+        expect(self.stats.get('my_subdomain_urls', 0)).to(equal(4))
 
     with it('counts inner subdomains correctly'):
         expect(self.stats.get('my_subdomain_count', 0)).to(equal(2))
