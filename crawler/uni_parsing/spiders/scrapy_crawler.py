@@ -49,24 +49,28 @@ class ExampleSpider(CrawlSpider):
 
     subdomains = set()
 
+    site_to_block = r'msu\.ru.*\/(en|ch)'
+
+    exclude_patterns = ('%5Cscience%5Cprem%5C', 'info\/info', 'tmpl\=c')
+
     rules = [
         # Rule for pages in subdomain to count their amount
-        Rule(LinkExtractor(allow = '\.' + allowed_domains[0],deny_extensions=MY_IGNORED_EXTENSIONS), callback='subdomain_counter', follow=False),
+        Rule(LinkExtractor(allow = f'(?<!www)\.{allowed_domains[0]}',deny=f'{site_to_block}',deny_extensions=MY_IGNORED_EXTENSIONS), callback='subdomain_counter', follow=False),
         # Rule for pages that are NOT in subdomain to download
         # Blocks only 1-st allowed domain
-        Rule(LinkExtractor(deny='\.' + allowed_domains[0]), callback='page_download', follow=True),
+        Rule(LinkExtractor(deny=(f'(?<!www)\.{allowed_domains[0]}|{site_to_block}', *exclude_patterns)), callback='page_download', follow=True),
         # Rule for files, regexpr searches for urls with pdf,doc or docx on the end. Ignores files in subdomains.
-        Rule(LinkExtractor(allow = '.*\.pdf$',deny='\.' + allowed_domains[0],deny_extensions=MY_IGNORED_EXTENSIONS), callback ='pdf_download'),
-        Rule(LinkExtractor(allow = '.*\.docx$',deny='\.' + allowed_domains[0],deny_extensions=MY_IGNORED_EXTENSIONS), callback ='docx_download'),
-        Rule(LinkExtractor(allow = '.*\.doc$',deny='\.' + allowed_domains[0],deny_extensions=MY_IGNORED_EXTENSIONS), callback ='doc_download'),
-        ] 
-    
+        Rule(LinkExtractor(allow = '.*\.pdf$',deny=(f'(?<!www)\.{allowed_domains[0]}|{site_to_block}', *exclude_patterns),deny_extensions=MY_IGNORED_EXTENSIONS), callback ='pdf_download'),
+        Rule(LinkExtractor(allow = '.*\.doc$',deny=(f'(?<!www)\.{allowed_domains[0]}|{site_to_block}', *exclude_patterns),deny_extensions=MY_IGNORED_EXTENSIONS), callback ='doc_download'),
+        Rule(LinkExtractor(allow = '.*\.docx$',deny=(f'(?<!www)\.{allowed_domains[0]}|{site_to_block}', *exclude_patterns),deny_extensions=MY_IGNORED_EXTENSIONS), callback ='docx_download'),
+        ]
+
     def _post_handler(self,url:str,file):
         data = {
                 'url': url,
             }
         files = {
-                'file': file   
+                'file': file
             }
         reqs.post(url=API_URL,data=data,files=files)
 
